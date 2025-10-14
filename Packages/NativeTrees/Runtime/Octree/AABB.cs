@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
@@ -35,12 +36,14 @@ namespace NativeTrees
         /// <summary>
         /// Returns wether this AABB overlaps with another AABB
         /// </summary>
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Overlaps(in AABB other) =>
             all(max >= other.min) && 
             all(other.max >= min);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Pure]
         public bool Contains(float3 point) => all(point >= min) && all(point <= max);
 
         /// <summary>

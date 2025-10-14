@@ -98,7 +98,7 @@ namespace NativeTrees.Samples
             public NativeQueue<int> nearest;
             public NativeParallelHashSet<int> set;
             
-            public bool OnVist(int obj)
+            public bool OnVist(int obj, AABB2D bounds)
             {
                 if (set.Add(obj))
                     nearest.Enqueue(obj);

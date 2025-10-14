@@ -1,6 +1,6 @@
 {
-  "name": "com.bartofzo.nativetrees",
-  "displayName": "NativeTrees",
+  "name": "com.boto.bartofzo.nativetrees",
+  "displayName": "NativeTrees.FORK",
   "version": "0.1.2",
   "unity": "2021.3",
   "description": "Generic, burst compatible sparse octree and quadtree \nthat store objects together with their axis aligned bounding boxes (AABB's)",

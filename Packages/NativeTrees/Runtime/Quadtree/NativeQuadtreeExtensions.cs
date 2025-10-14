@@ -136,7 +136,7 @@ namespace NativeTrees
             public T nearest;
             public bool found;
             
-            public bool OnVist(T obj)
+            public bool OnVist(T obj, AABB2D bounds)
             {
                 this.found = true;
                 this.nearest = obj;

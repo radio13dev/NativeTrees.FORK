@@ -123,7 +123,7 @@ namespace NativeTrees
                             maxDistanceSquared: maxDistanceSquared,
                             distanceProvider: distanceSquaredProvider);
                     }
-                    else if (!visitor.OnVist(objList[nearestWrapper.objIndex].obj))
+                    else if (!visitor.OnVist(objList[nearestWrapper.objIndex].obj, objList[nearestWrapper.objIndex].bounds))
                     {
                         break;
                     }

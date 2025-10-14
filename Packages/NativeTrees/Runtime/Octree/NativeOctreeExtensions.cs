@@ -133,7 +133,7 @@ namespace NativeTrees
             public T nearest;
             public bool found;
             
-            public bool OnVist(T obj)
+            public bool OnVist(T obj, AABB bounds)
             {
                 this.found = true;
                 this.nearest = obj;

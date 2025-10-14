@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,10 +9,11 @@ namespace NativeTrees
     /// <summary>
     /// 2D axis aligned bounding box with support for fast ray intersection checking.
     /// </summary>
+    [Serializable]
     public struct AABB2D
     {
-        public readonly float2 min;
-        public readonly float2 max;
+        [SerializeField] public readonly float2 min;
+        [SerializeField] public readonly float2 max;
 
         public float2 Center => .5f * (min + max);
         public float2 Size => max - min;
