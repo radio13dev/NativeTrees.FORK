@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Deterministic.FixedPoint;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics.Fixed;
@@ -374,7 +375,7 @@ namespace NativeTrees
             /// </summary>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static QuarterSizeBounds GetOctant(in QuarterSizeBounds parent, int index) => 
-                new QuarterSizeBounds(parent.nodeCenter + OctantCenterOffsets[index] * parent.nodeQuarterSize, .5f * parent.nodeQuarterSize);
+                new QuarterSizeBounds(parent.nodeCenter + OctantCenterOffsets[index] * parent.nodeQuarterSize, fp._0_50 * parent.nodeQuarterSize);
             
             // note: yes, new quarterSize can be precomputed but benchmarking showed no difference and it enhances readability
         }
@@ -393,7 +394,7 @@ namespace NativeTrees
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static ExtentsBounds GetOctant(in ExtentsBounds parent, int index)
             {
-                float3 octantExtents = .5f * parent.nodeExtents;
+                float3 octantExtents = fp._0_50 * parent.nodeExtents;
                 return new ExtentsBounds(parent.nodeCenter + OctantCenterOffsets[index] * octantExtents, octantExtents);
             }
 

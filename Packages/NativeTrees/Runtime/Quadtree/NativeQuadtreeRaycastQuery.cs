@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Deterministic.FixedPoint;
 using Unity.Collections;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -19,7 +20,18 @@ namespace NativeTrees
         /// <param name="maxDistance">Max distance from the ray's origin a hit may occur</param>
         /// <typeparam name="U">Type of intersecter</typeparam>
         /// <returns>True when a hit has occured</returns>
-        public bool Raycast<U>(Ray2D ray, out QuadtreeRaycastHit<T> hit, U intersecter = default, fp maxDistance = fp.PositiveInfinity) where U : struct, IQuadtreeRayIntersecter<T>
+        public bool Raycast<U>(Ray2D ray, out QuadtreeRaycastHit<T> hit, U intersecter) where U : struct, IQuadtreeRayIntersecter<T>
+            => Raycast<U>(ray, out hit, intersecter, maxDistance: fp.usable_max);
+        /// <summary>
+        /// Perform a raycast against the quadtree
+        /// </summary>
+        /// <param name="ray">Input ray</param>
+        /// <param name="hit">The resulting hit</param>
+        /// <param name="intersecter">Delegate to compute ray intersections against the objects or AABB's</param>
+        /// <param name="maxDistance">Max distance from the ray's origin a hit may occur</param>
+        /// <typeparam name="U">Type of intersecter</typeparam>
+        /// <returns>True when a hit has occured</returns>
+        public bool Raycast<U>(Ray2D ray, out QuadtreeRaycastHit<T> hit, U intersecter, fp maxDistance) where U : struct, IQuadtreeRayIntersecter<T>
         {
             var computedRay = new PrecomputedRay2D(ray);
 
@@ -129,7 +141,7 @@ namespace NativeTrees
                 
                 // get next octant from plane index
                 quadIndex ^= 1 << closestPlaneIndex;
-                planeHits[closestPlaneIndex] = fp.PositiveInfinity;
+                planeHits[closestPlaneIndex] = fp.usable_max;
             }
             
             hit = default;

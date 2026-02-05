@@ -1,5 +1,6 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
+using Deterministic.FixedPoint;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
 using static Unity.Mathematics.Fixed.math;
@@ -17,7 +18,7 @@ namespace NativeTrees
         public float3 min;
         public float3 max;
 
-        public float3 Center => .5f * (min + max);
+        public float3 Center => fp._0_50 * (min + max);
         public float3 Size => max - min;
         
       

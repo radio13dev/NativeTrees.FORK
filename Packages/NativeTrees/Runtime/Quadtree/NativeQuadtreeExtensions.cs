@@ -1,4 +1,5 @@
 using System;
+using Deterministic.FixedPoint;
 using Unity.Collections;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -16,9 +17,14 @@ namespace NativeTrees
         /// <summary>
         /// Performs a raycast on the octree just using the bounds of the objects in it
         /// </summary>
-        public static bool RaycastAABB<T>(this NativeQuadtree<T> quadtree, Ray2D ray, out QuadtreeRaycastHit<T> hit, fp maxDistance = fp.PositiveInfinity) where T : unmanaged
+        public static bool RaycastAABB<T>(this NativeQuadtree<T> quadtree, Ray2D ray, out QuadtreeRaycastHit<T> hit) where T : unmanaged
+            => RaycastAABB<T>(quadtree, ray, out hit, maxDistance: fp.usable_max);
+        /// <summary>
+        /// Performs a raycast on the octree just using the bounds of the objects in it
+        /// </summary>
+        public static bool RaycastAABB<T>(this NativeQuadtree<T> quadtree, Ray2D ray, out QuadtreeRaycastHit<T> hit, fp maxDistance) where T : unmanaged
         {
-            return quadtree.Raycast<RayAABBIntersecter<T>>(ray, out hit, maxDistance: maxDistance);
+            return quadtree.Raycast<RayAABBIntersecter<T>>(ray, out hit, default, maxDistance: maxDistance);
         }
 
         struct RayAABBIntersecter<T> : IQuadtreeRayIntersecter<T> where T : unmanaged

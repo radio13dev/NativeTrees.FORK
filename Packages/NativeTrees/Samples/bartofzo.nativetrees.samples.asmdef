@@ -5,7 +5,8 @@
         "Unity.Burst",
         "com.bartofzo.nativetrees",
         "Unity.Collections",
-        "Unity.Mathematics"
+        "Unity.Mathematics.Fixed",
+        "FixedPointSharp"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

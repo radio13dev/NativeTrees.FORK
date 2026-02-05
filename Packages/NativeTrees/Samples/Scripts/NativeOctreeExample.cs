@@ -93,7 +93,7 @@ namespace NativeTrees.Samples
             var ray = camera.ScreenPointToRay(Input.mousePosition);
 
             var sw = Stopwatch.StartNew();
-            bool didHit = octree.Raycast<TriangleRayIntersecter>(ray, out var hit);
+            bool didHit = octree.Raycast<TriangleRayIntersecter>(ray, out var hit, default);
 
 
             if (didHit)

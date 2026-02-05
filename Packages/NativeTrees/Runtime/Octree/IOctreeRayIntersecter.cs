@@ -1,3 +1,5 @@
+using Deterministic.FixedPoint;
+
 namespace NativeTrees
 {
     public interface IOctreeRayIntersecter<T>

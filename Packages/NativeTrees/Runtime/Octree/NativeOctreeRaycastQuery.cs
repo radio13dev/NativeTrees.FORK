@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Deterministic.FixedPoint;
 using Unity.Collections;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -17,10 +18,20 @@ namespace NativeTrees
         /// <param name="ray">Input ray</param>
         /// <param name="hit">The resulting hit</param>
         /// <param name="intersecter">Delegate to compute ray intersections against the objects or AABB's</param>
+        /// <typeparam name="U">Type of intersecter</typeparam>
+        /// <returns>True when a hit has occured</returns>
+        public bool Raycast<U>(Ray ray, out OctreeRaycastHit<T> hit, U intersecter) where U : struct, IOctreeRayIntersecter<T>
+            => Raycast<U>(ray, out hit, intersecter, maxDistance: fp.usable_max);
+        /// <summary>
+        /// Perform a raycast against the octree
+        /// </summary>
+        /// <param name="ray">Input ray</param>
+        /// <param name="hit">The resulting hit</param>
+        /// <param name="intersecter">Delegate to compute ray intersections against the objects or AABB's</param>
         /// <param name="maxDistance">Max distance from the ray's origin a hit may occur</param>
         /// <typeparam name="U">Type of intersecter</typeparam>
         /// <returns>True when a hit has occured</returns>
-        public bool Raycast<U>(Ray ray, out OctreeRaycastHit<T> hit, U intersecter = default, fp maxDistance = fp.PositiveInfinity) where U : struct, IOctreeRayIntersecter<T>
+        public bool Raycast<U>(Ray ray, out OctreeRaycastHit<T> hit, U intersecter, fp maxDistance) where U : struct, IOctreeRayIntersecter<T>
         {
             var computedRay = new PrecomputedRay(ray);
 
@@ -111,7 +122,7 @@ namespace NativeTrees
                 
                 // get next octant from plane index
                 octantIndex ^= 1 << closestPlaneIndex;
-                planeHits[closestPlaneIndex] = fp.PositiveInfinity;
+                planeHits[closestPlaneIndex] = fp.usable_max;
             }
             
             hit = default;

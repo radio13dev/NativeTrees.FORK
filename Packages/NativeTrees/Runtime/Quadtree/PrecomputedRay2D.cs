@@ -27,7 +27,7 @@ namespace NativeTrees
         {
             this.origin = ray.origin;
             this.dir = ray.direction;
-            this.invDir = 1f / dir;
+            this.invDir = 1 / dir;
         }
 
         /// <summary>

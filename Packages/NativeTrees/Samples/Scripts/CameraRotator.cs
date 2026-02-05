@@ -1,4 +1,6 @@
+using Deterministic.FixedPoint;
 using UnityEngine;
+using Unity.Mathematics.Fixed;
 
 namespace NativeTrees.Samples
 {
@@ -7,17 +9,17 @@ namespace NativeTrees.Samples
     /// </summary>
     public class CameraRotator : MonoBehaviour
     {
-        public fp speed = .1f;
-        public fp distance = 3f;
+        public fp speed = fp._0_10;
+        public fp distance = fp._3;
         public Transform lookAt;
         
         
         private void Update()
         {
-            fp scaledTime = Time.time * speed;
-            fp x = Mathf.Sin(scaledTime);
-            fp y = 1.5f + Mathf.Sin(1.1234f * + scaledTime);
-            fp z = Mathf.Sin(1.3453f * scaledTime);
+            fp scaledTime = (fp)Time.time * speed;
+            fp x = math.sin(scaledTime);
+            fp y = 1.5f + math.sin(1.1234f * + scaledTime);
+            fp z = math.sin(1.3453f * scaledTime);
 
             Vector3 dir = new Vector3(x, y, z).normalized;
             Vector3 pos = lookAt.position + distance * dir;
