@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NativeTrees;
 using Unity.Collections;
-using Unity.Mathematics.Fixed;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -34,8 +34,8 @@ namespace NativeTrees.Samples
             for (int i = 0; i < squareCount; i++)
             {
                 Vector2 pos = new Vector2(
-                    Random.Range(bounds.min.x, bounds.max.x) * Random.value, 
-                    Random.Range(bounds.min.y, bounds.max.y) * Random.value
+                    Random.Range((float)bounds.min.x, (float)bounds.max.x) * Random.value, 
+                    Random.Range((float)bounds.min.y, (float)bounds.max.y) * Random.value
                     );
                 
                 var square = Instantiate(squarePrefab, pos, Quaternion.identity).GetComponent<QuadtreeSquare>();
@@ -119,7 +119,7 @@ namespace NativeTrees.Samples
             {
                 var square = squares[squareId];
                 var size = square.Bounds.Size;
-                Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3(size.x, size.y));
+                Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3((float)size.x, (float)size.y));
             }
             
             // Draw blue boxes around range overlap
@@ -131,20 +131,20 @@ namespace NativeTrees.Samples
 
                 var size = square.Bounds.Size;
 
-                Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3(size.x, size.y));
+                Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3((float)size.x, (float)size.y));
             }
             
             // Green box for raycast
       
             Gizmos.color = Color.green;
             Gizmos.DrawLine(mouseDownPos, mousePos);
-            if (quadtree.RaycastAABB(new Ray2D(mouseDownPos, (mousePos - mouseDownPos).normalized), out var hit, 
-                maxDistance: math.distance(mouseDownPos, mousePos)))
+            if (quadtree.RaycastAABB(new Ray2D(mouseDownPos, (mousePos - mouseDownPos).normalized), out var hit,
+                maxDistance: Unity.Mathematics.Fixed.math.distance(mouseDownPos, mousePos)))
             {
                 if (squares.TryGetValue(hit.obj, out var square))
                 {
                     var size = square.Bounds.Size;
-                    Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3(size.x, size.y));
+                    Gizmos.DrawCube(square.transform.position, 1.25f * new Vector3((float)size.x, (float)size.y));
                 }
             }
 

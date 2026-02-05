@@ -1,4 +1,5 @@
 using System;
+using Deterministic.FixedPoint;
 using NativeTrees;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace NativeTrees.Samples
         {
             if (!objBounds.IntersectsRay(ray))
             {
-                distance = fp.PositiveInfinity;
+                distance = fp.usable_max;
                 return false;
             }
 

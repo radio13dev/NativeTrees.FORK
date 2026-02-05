@@ -1,4 +1,5 @@
 using System;
+using Deterministic.FixedPoint;
 using NativeTrees;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -55,12 +56,12 @@ namespace NativeTrees.Samples
             det = math.dot(e1, p);
  
             //if determinant is near zero, ray lies in plane of triangle otherwise not
-            if (det > -fp.Epsilon && det < fp.Epsilon)
+            if (det > -fp.epsilon && det < fp.epsilon)
             {
                 distance = 0;
                 return false;
             }
-            invDet = 1.0f / det;
+            invDet = 1 / det;
  
             //calculate distance from p1 to ray origin
             t = rayOrigin - a;
@@ -89,7 +90,7 @@ namespace NativeTrees.Samples
             }
 
             distance = math.dot(e2, q) * invDet;
-            return distance > fp.Epsilon;
+            return distance > fp.epsilon;
         }
 
         public bool Equals(Triangle other)

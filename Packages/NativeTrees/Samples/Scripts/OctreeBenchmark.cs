@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Text;
+using Deterministic.FixedPoint;
 using NativeTrees;
 using Unity.Burst;
 using Unity.Collections;
@@ -46,25 +47,25 @@ namespace NativeTrees.Samples
             {
                 // Slightly more realistic division, such that not all octants are divided up the same
                 randomPoints[i] = new float3(
-                    Random.Range(0, boundsExtents.x),
-                    Random.Range(-boundsExtents.y, 0),
-                    Random.Range(0, boundsExtents.z));
+                    fp.ParseUnsafe(Random.Range(0, (float)boundsExtents.x)),
+                    fp.ParseUnsafe(Random.Range(-(float)boundsExtents.y, 0)),
+                    fp.ParseUnsafe(Random.Range(0, (float)boundsExtents.z)));
             }
 
             for (int i = 0; i < randomAABBs.Length; i++)
             {
                 var point = randomPoints[i];
                 randomAABBs[i] = new AABB(
-                    point - new float3(Random.value, Random.value, Random.value),
-                    point + new float3(Random.value, Random.value, Random.value));
+                    point - new float3(fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value)),
+                    point + new float3(fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value)));
             }
             
             for (int i = 0; i < randomRays.Length; i++)
             {
                 randomRays[i] = new Ray(new Vector3(
-                    Random.Range(-boundsExtents.x, boundsExtents.x),
-                    Random.Range(-boundsExtents.y, boundsExtents.y),
-                    Random.Range(-boundsExtents.z, boundsExtents.z)), Random.onUnitSphere);
+                    Random.Range(-(float)boundsExtents.x, (float)boundsExtents.x),
+                    Random.Range(-(float)boundsExtents.y, (float)boundsExtents.y),
+                    Random.Range(-(float)boundsExtents.z, (float)boundsExtents.z)), Random.onUnitSphere);
             }
 
             StartCoroutine(Run());

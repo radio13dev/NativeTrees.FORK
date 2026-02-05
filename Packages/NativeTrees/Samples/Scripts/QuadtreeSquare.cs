@@ -1,4 +1,5 @@
 using System;
+using Deterministic.FixedPoint;
 using NativeTrees;
 using Unity.Mathematics.Fixed;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace NativeTrees.Samples
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
         
-        public static readonly Vector2 Extents = new float2(.5f, .5f);
+        public static readonly Vector2 Extents = new float2(fp._0_50, fp._0_50);
 
         public AABB2D Bounds
         {

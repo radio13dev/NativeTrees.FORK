@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Text;
+using Deterministic.FixedPoint;
 using NativeTrees;
 using Unity.Burst;
 using Unity.Collections;
@@ -39,16 +40,16 @@ namespace NativeTrees.Samples
             for (int i = 0; i < randomPoints.Length; i++)
             {
                 randomPoints[i] = new float2(
-                    Random.Range(-boundsExtents.x, boundsExtents.x),
-                    Random.Range(-boundsExtents.y, boundsExtents.y));
+                    fp.ParseUnsafe(Random.Range(-(float)boundsExtents.x, (float)boundsExtents.x)),
+                    fp.ParseUnsafe(Random.Range(-(float)boundsExtents.y, (float)boundsExtents.y)));
             }
 
             for (int i = 0; i < randomAABBs.Length; i++)
             {
                 var point = randomPoints[i];
                 randomAABBs[i] = new AABB2D(
-                    point - new float2(Random.value, Random.value),
-                    point + new float2(Random.value, Random.value));
+                    point - new float2(fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value)),
+                    point + new float2(fp.ParseUnsafe(Random.value), fp.ParseUnsafe(Random.value)));
             }
 
             StartCoroutine(Run());

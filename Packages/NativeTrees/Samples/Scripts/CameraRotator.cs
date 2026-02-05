@@ -9,17 +9,17 @@ namespace NativeTrees.Samples
     /// </summary>
     public class CameraRotator : MonoBehaviour
     {
-        public fp speed = fp._0_10;
-        public fp distance = fp._3;
+        public float speed = 0.1f;
+        public float distance = 3;
         public Transform lookAt;
         
         
         private void Update()
         {
-            fp scaledTime = (fp)Time.time * speed;
-            fp x = math.sin(scaledTime);
-            fp y = 1.5f + math.sin(1.1234f * + scaledTime);
-            fp z = math.sin(1.3453f * scaledTime);
+            float scaledTime = (float)Time.time * speed;
+            float x = Mathf.Sin(scaledTime);
+            float y = 1.5f + Mathf.Sin(1.1234f * + scaledTime);
+            float z = Mathf.Sin(1.3453f * scaledTime);
 
             Vector3 dir = new Vector3(x, y, z).normalized;
             Vector3 pos = lookAt.position + distance * dir;
