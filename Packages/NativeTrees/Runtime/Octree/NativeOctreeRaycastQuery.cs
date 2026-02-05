@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using Unity.Collections;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 // https://bartvandesande.nl
@@ -20,12 +20,12 @@ namespace NativeTrees
         /// <param name="maxDistance">Max distance from the ray's origin a hit may occur</param>
         /// <typeparam name="U">Type of intersecter</typeparam>
         /// <returns>True when a hit has occured</returns>
-        public bool Raycast<U>(Ray ray, out OctreeRaycastHit<T> hit, U intersecter = default, float maxDistance = float.PositiveInfinity) where U : struct, IOctreeRayIntersecter<T>
+        public bool Raycast<U>(Ray ray, out OctreeRaycastHit<T> hit, U intersecter = default, fp maxDistance = fp.PositiveInfinity) where U : struct, IOctreeRayIntersecter<T>
         {
             var computedRay = new PrecomputedRay(ray);
 
             // check if ray even hits the boundary, and if so, we use the intersectin point to transpose our ray
-            if (!bounds.IntersectsRay(computedRay.origin, computedRay.invDir, out float tMin) || tMin > maxDistance)
+            if (!bounds.IntersectsRay(computedRay.origin, computedRay.invDir, out fp tMin) || tMin > maxDistance)
             {
                 hit = default;
                 return false;
@@ -50,7 +50,7 @@ namespace NativeTrees
             uint nodeId, in ExtentsBounds extentsBounds,
             out OctreeRaycastHit<T> hit, 
             ref U intersecter, 
-            int parentDepth, float maxDistance) 
+            int parentDepth, fp maxDistance) 
             where U : struct, IOctreeRayIntersecter<T>
         {
             parentDepth++;
@@ -67,7 +67,7 @@ namespace NativeTrees
             // for our first (closest) octant, it must be the position the ray entered the parent node
             int octantIndex = PointToOctantIndex(ray.origin, extentsBounds.nodeCenter);
             float3 octantRayIntersection = ray.origin;
-            float octantDistance = 0;
+            fp octantDistance = 0;
 
             for (int i = 0; i < 4; i++)
             {
@@ -87,12 +87,12 @@ namespace NativeTrees
                 }
 
                 // find next octant to test:
-                float closestDistance = maxDistance; //float.PositiveInfinity;
+                fp closestDistance = maxDistance; //fp.PositiveInfinity;
                 int closestPlaneIndex = -1;
                 
                 for (int j = 0; j < 3; j++)
                 {
-                    float t = planeHits[j];
+                    fp t = planeHits[j];
                     if (t > closestDistance || t < 0) continue; // negative t is backwards
                     
                     float3 planeRayIntersection = ray.origin + t * ray.dir;
@@ -111,7 +111,7 @@ namespace NativeTrees
                 
                 // get next octant from plane index
                 octantIndex ^= 1 << closestPlaneIndex;
-                planeHits[closestPlaneIndex] = float.PositiveInfinity;
+                planeHits[closestPlaneIndex] = fp.PositiveInfinity;
             }
             
             hit = default;
@@ -123,21 +123,21 @@ namespace NativeTrees
             in ExtentsBounds extentsBounds, 
             int objectCount,
             out OctreeRaycastHit<T> hit,
-            ref U intersecter, float maxDistance,
+            ref U intersecter, fp maxDistance,
             int depth) where U : struct, IOctreeRayIntersecter<T>
         {
             // Are we in a leaf node?
             if (objectCount <= objectsPerNode || depth == maxDepth)
             {
                 hit = default;
-                float closest = maxDistance;
+                fp closest = maxDistance;
                 bool didHit = false;
 
                 if (objects.TryGetFirstValue(nodeId, out var wrappedObj, out var it))
                 {
                     do
                     {
-                        if (intersecter.IntersectRay(ray, wrappedObj.obj, wrappedObj.bounds, out float t) && t < closest)
+                        if (intersecter.IntersectRay(ray, wrappedObj.obj, wrappedObj.bounds, out fp t) && t < closest)
                         {
                             closest = t;
                             hit.obj = wrappedObj.obj;

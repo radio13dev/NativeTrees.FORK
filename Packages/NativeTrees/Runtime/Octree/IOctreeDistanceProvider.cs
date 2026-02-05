@@ -1,4 +1,4 @@
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 
 namespace NativeTrees
 {
@@ -10,6 +10,6 @@ namespace NativeTrees
         /// <param name="point">The point to measure the distance from</param>
         /// <param name="obj">The object to measure the distance to</param>
         /// <param name="bounds">The bounds of the object</param>
-        float DistanceSquared(float3 point, T obj, AABB bounds);
+        fp DistanceSquared(float3 point, T obj, AABB bounds);
     }
 }

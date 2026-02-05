@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 // https://bartvandesande.nl

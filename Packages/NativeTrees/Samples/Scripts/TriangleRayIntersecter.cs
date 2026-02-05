@@ -1,17 +1,17 @@
 using System;
 using NativeTrees;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 namespace NativeTrees.Samples
 {
     public struct TriangleRayIntersecter : IOctreeRayIntersecter<Triangle>
     {
-        public bool IntersectRay(in PrecomputedRay ray, Triangle triangle, AABB objBounds, out float distance)
+        public bool IntersectRay(in PrecomputedRay ray, Triangle triangle, AABB objBounds, out fp distance)
         {
             if (!objBounds.IntersectsRay(ray))
             {
-                distance = float.PositiveInfinity;
+                distance = fp.PositiveInfinity;
                 return false;
             }
 

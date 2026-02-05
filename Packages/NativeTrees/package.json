@@ -1,6 +1,10 @@
 {
   "name": "com.boto.bartofzo.nativetrees",
   "displayName": "NativeTrees.FORK",
+  "author": {
+      "name": "radio13dev",
+      "url": "https://github.com/radio13dev"
+  },
   "version": "0.1.2",
   "unity": "2021.3",
   "description": "Generic, burst compatible sparse octree and quadtree \nthat store objects together with their axis aligned bounding boxes (AABB's)",
@@ -13,6 +17,7 @@
   "type": "library",
   "dependencies": {
     "com.unity.burst": "1.6.6",
-    "com.unity.collections": "1.4.0"
+    "com.unity.collections": "1.4.0",
+    "com.boto.mathematics.fixed": "https://github.com/radio13dev/Unity.Mathematics.Fork.git?path=/Assets/root/"
   }
 }

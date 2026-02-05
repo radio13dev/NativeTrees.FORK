@@ -52,7 +52,7 @@ acts as a delegate to determine if a ray intersects with an object that's in the
 
     struct RayAABBIntersecter<T> : IOctreeRayIntersecter<T>
     {
-      public bool IntersectRay(in PrecomputedRay ray, T obj, AABB objBounds, out float distance)
+      public bool IntersectRay(in PrecomputedRay ray, T obj, AABB objBounds, out fp distance)
       {
         return objBounds.IntersectsRay(ray, out distance);
       }
@@ -69,7 +69,7 @@ NativeTrees support nearest neighbour queries. You should implement IOctreeNeare
     struct AABBDistanceSquaredProvider<T> : IOctreeDistanceProvider<T> 
     {
         // Just return the distance squared to our bounds
-        public float DistanceSquared(float3 point, T obj, AABB bounds) => bounds.DistanceSquared(point);
+        public fp DistanceSquared(float3 point, T obj, AABB bounds) => bounds.DistanceSquared(point);
     }
 
     struct OctreeNearestAABBVisitor<T> : IOctreeNearestVisitor<T>

@@ -1,6 +1,6 @@
 using System;
 using NativeTrees;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 namespace NativeTrees.Samples

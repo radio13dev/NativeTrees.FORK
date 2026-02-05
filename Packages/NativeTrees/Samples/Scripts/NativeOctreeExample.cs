@@ -4,7 +4,7 @@ using NativeTrees;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
@@ -118,7 +118,7 @@ namespace NativeTrees.Samples
                 Random.Range(octree.Bounds.min.y, octree.Bounds.max.y),
                 Random.Range(octree.Bounds.min.z, octree.Bounds.max.z));
     
-            float maxDistance = 100;
+            fp maxDistance = 100;
     
             sw.Restart();
             if (query.TryGetNearestAABB(ref octree, point, maxDistance, out var nearestTri))

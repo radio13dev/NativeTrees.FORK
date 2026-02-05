@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
-using static Unity.Mathematics.math;
+using static Unity.Mathematics.Fixed.math;
 
 namespace NativeTrees
 {
@@ -64,7 +64,7 @@ namespace NativeTrees
         /// Returns the squared distance of a point to this AABB. If the point lies in the box, zero is returned.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DistanceSquared(float2 point) => distancesq(point, ClosestPoint(point));
+        public fp DistanceSquared(float2 point) => distancesq(point, ClosestPoint(point));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool ContainsPoint(in float2 point) => all(point >= min) && all(point <= max);
@@ -78,7 +78,7 @@ namespace NativeTrees
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IntersectsRay(in PrecomputedRay2D ray, out float2 point)
         {
-            if (IntersectsRay(ray.origin, ray.invDir, out float t))
+            if (IntersectsRay(ray.origin, ray.invDir, out fp t))
             {
                 point = ray.origin + ray.dir * t;
                 return true;
@@ -102,7 +102,7 @@ namespace NativeTrees
         /// generally implements a further check.
         /// See https://tavianator.com/2011/ray_box.html and https://tavianator.com/2015/ray_box_nan.html</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IntersectsRay(in float2 rayPos, in float2 rayInvDir, out float tMin) 
+        public bool IntersectsRay(in float2 rayPos, in float2 rayInvDir, out fp tMin) 
         {
             float2 t1 = (min - rayPos) * rayInvDir;
             float2 t2 = (max - rayPos) * rayInvDir;
@@ -111,7 +111,7 @@ namespace NativeTrees
             float2 tMax1 = max(t1, t2);
 
             tMin = max(0, cmax(tMin1));
-            float tMax = cmin(tMax1);
+            fp tMax = cmin(tMax1);
 
             return tMax >= tMin;
         }

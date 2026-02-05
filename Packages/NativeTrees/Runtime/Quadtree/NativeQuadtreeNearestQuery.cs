@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 
 // https://bartvandesande.nl
 // https://github.com/bartofzo
@@ -23,7 +23,7 @@ namespace NativeTrees
         /// <typeparam name="V">Provide a calculation for the distance</typeparam>
         /// <remarks>Allocates native containers. To prevent reallocating for every query, create a <see cref="NearestNeighbourQuery"/> struct
         /// and re-use it.</remarks>
-        public void Nearest<U, V>(float2 point, float maxDistance, ref U visitor, V distanceSquaredProvider = default)
+        public void Nearest<U, V>(float2 point, fp maxDistance, ref U visitor, V distanceSquaredProvider = default)
             where U : struct, IQuadtreeNearestVisitor<T>
             where V : struct, IQuadtreeDistanceProvider<T>
         {
@@ -82,11 +82,11 @@ namespace NativeTrees
             /// <param name="distanceSquaredProvider">Provide a calculation for the distance</param>
             /// <typeparam name="U">Handler type for when a neighbour is encountered</typeparam>
             /// <typeparam name="V">Provide a calculation for the distance</typeparam>
-            public void Nearest<U, V>(ref NativeQuadtree<T> quadtree, float2 point, float maxDistance, ref U visitor, V distanceSquaredProvider = default)
+            public void Nearest<U, V>(ref NativeQuadtree<T> quadtree, float2 point, fp maxDistance, ref U visitor, V distanceSquaredProvider = default)
                 where U : struct, IQuadtreeNearestVisitor<T>
                 where V : struct, IQuadtreeDistanceProvider<T>
             {
-                float maxDistanceSquared = maxDistance * maxDistance;
+                fp maxDistanceSquared = maxDistance * maxDistance;
                 
                 // reference for the method used:
                 // https://stackoverflow.com/questions/41306122/nearest-neighbor-search-in-quadtree
@@ -130,7 +130,7 @@ namespace NativeTrees
                 }
             }
 
-            void NearestNode<V>(ref NativeQuadtree<T> quadtree, float2 point, float maxDistanceSquared, in DistanceAndIndexWrapper distanceAndIndexWrapper, V distanceProvider = default)
+            void NearestNode<V>(ref NativeQuadtree<T> quadtree, float2 point, fp maxDistanceSquared, in DistanceAndIndexWrapper distanceAndIndexWrapper, V distanceProvider = default)
                 where V : struct, IQuadtreeDistanceProvider<T>
             {
                 ref var node = ref nodeList.ElementAt(distanceAndIndexWrapper.nodeIndex);
@@ -143,7 +143,7 @@ namespace NativeTrees
                     {
                         do
                         {
-                            float objDistanceSquared = distanceProvider.DistanceSquared(point, objWrapper.obj, objWrapper.bounds);
+                            fp objDistanceSquared = distanceProvider.DistanceSquared(point, objWrapper.obj, objWrapper.bounds);
                             if (objDistanceSquared > maxDistanceSquared)
                                 continue;
 
@@ -171,7 +171,7 @@ namespace NativeTrees
                     parentDepth: node.nodeDepth);
             }
 
-            void NearestNodeNext(ref NativeQuadtree<T> quadtree, float2 point, ref NodeWrapper nodeWrapper, float maxDistanceSquared, int parentDepth)
+            void NearestNodeNext(ref NativeQuadtree<T> quadtree, float2 point, ref NodeWrapper nodeWrapper, fp maxDistanceSquared, int parentDepth)
             {
                 parentDepth++;
                 for (int i = 0; i < 4; i++)
@@ -181,7 +181,7 @@ namespace NativeTrees
                         continue;
 
                     var quadCenterExtents = ExtentsBounds.GetQuad(nodeWrapper.ExtentsBounds, i);
-                    float distanceSquared = ExtentsBounds.GetBounds(quadCenterExtents).DistanceSquared(point);
+                    fp distanceSquared = ExtentsBounds.GetBounds(quadCenterExtents).DistanceSquared(point);
 
                     if (distanceSquared > maxDistanceSquared)
                         continue;
@@ -207,14 +207,14 @@ namespace NativeTrees
             /// </summary>
             readonly struct DistanceAndIndexWrapper
             {
-                public readonly float distanceSquared;
+                public readonly fp distanceSquared;
                 
                 // There's no polymorphism with HPC#, so this is our way around that
                 public readonly int objIndex;
                 public readonly int nodeIndex;
                 public readonly bool isNode;
 
-                public DistanceAndIndexWrapper(float distanceSquared, int objIndex, int nodeIndex, bool isNode)
+                public DistanceAndIndexWrapper(fp distanceSquared, int objIndex, int nodeIndex, bool isNode)
                 {
                     this.distanceSquared = distanceSquared;
                     this.objIndex = objIndex;

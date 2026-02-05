@@ -1,6 +1,6 @@
 using System;
 using NativeTrees;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 namespace NativeTrees.Samples
@@ -36,13 +36,13 @@ namespace NativeTrees.Samples
         /// <param name="rayDirection">direction of the ray</param>
         /// <param name="distance">How for along the ray the hit occured</param>
         /// <returns><c>true</c> when the ray hits the triangle, otherwise <c>false</c></returns>
-        public bool IntersectsRay(float3 rayOrigin, float3 rayDirection, out float distance)
+        public bool IntersectsRay(float3 rayOrigin, float3 rayDirection, out fp distance)
         {
             // Vectors from p1 to p2/p3 (edges)
             float3 e1, e2;  
  
             float3 p, q, t;
-            float det, invDet, u, v;
+            fp det, invDet, u, v;
 
             //Find vectors for two edges sharing vertex/point p1
             e1 = b - a;
@@ -55,7 +55,7 @@ namespace NativeTrees.Samples
             det = math.dot(e1, p);
  
             //if determinant is near zero, ray lies in plane of triangle otherwise not
-            if (det > -float.Epsilon && det < float.Epsilon)
+            if (det > -fp.Epsilon && det < fp.Epsilon)
             {
                 distance = 0;
                 return false;
@@ -89,7 +89,7 @@ namespace NativeTrees.Samples
             }
 
             distance = math.dot(e2, q) * invDet;
-            return distance > float.Epsilon;
+            return distance > fp.Epsilon;
         }
 
         public bool Equals(Triangle other)

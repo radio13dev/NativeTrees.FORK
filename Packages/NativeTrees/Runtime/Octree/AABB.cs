@@ -1,8 +1,8 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
-using static Unity.Mathematics.math;
+using static Unity.Mathematics.Fixed.math;
 
 namespace NativeTrees
 {
@@ -66,7 +66,7 @@ namespace NativeTrees
         /// Returns the squared distance of a point to this AABB. If the point lies in the box, zero is returned.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DistanceSquared(float3 point) => distancesq(point, ClosestPoint(point));
+        public fp DistanceSquared(float3 point) => distancesq(point, ClosestPoint(point));
 
         /// <summary>
         /// Returns if a ray intersects with this bounding box. If you need the test the same ray
@@ -84,7 +84,7 @@ namespace NativeTrees
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IntersectsRay(in PrecomputedRay ray, out float3 point)
         {
-            if (IntersectsRay(ray.origin, ray.invDir, out float tMin))
+            if (IntersectsRay(ray.origin, ray.invDir, out fp tMin))
             {
                 point = ray.origin + ray.dir * tMin;
                 return true;
@@ -95,7 +95,7 @@ namespace NativeTrees
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IntersectsRay(in PrecomputedRay ray, out float tMin) => IntersectsRay(ray.origin, ray.invDir, out tMin);
+        public bool IntersectsRay(in PrecomputedRay ray, out fp tMin) => IntersectsRay(ray.origin, ray.invDir, out tMin);
 
         /// <summary>
         /// Returns if a ray intersects with this bounding box.
@@ -104,7 +104,7 @@ namespace NativeTrees
         /// and may return a false positive in that case. See https://tavianator.com/2011/ray_box.html and https://tavianator.com/2015/ray_box_nan.html</remarks>
         /// <returns>Wether the ray intersects this bounding box</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IntersectsRay(in float3 rayPos, in float3 rayInvDir, out float tMin) 
+        public bool IntersectsRay(in float3 rayPos, in float3 rayInvDir, out fp tMin) 
         {
             float3 t1 = (min - rayPos) * rayInvDir;
             float3 t2 = (max - rayPos) * rayInvDir;
@@ -113,7 +113,7 @@ namespace NativeTrees
             float3 tMax1 = max(t1, t2);
 
             tMin = max(0, cmax(tMin1));
-            float tMax = cmin(tMax1);
+            fp tMax = cmin(tMax1);
             
             return tMax >= tMin;
         }

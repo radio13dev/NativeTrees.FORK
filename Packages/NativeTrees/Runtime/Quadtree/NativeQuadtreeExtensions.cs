@@ -1,6 +1,6 @@
 using System;
 using Unity.Collections;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 
 // https://bartvandesande.nl
@@ -16,14 +16,14 @@ namespace NativeTrees
         /// <summary>
         /// Performs a raycast on the octree just using the bounds of the objects in it
         /// </summary>
-        public static bool RaycastAABB<T>(this NativeQuadtree<T> quadtree, Ray2D ray, out QuadtreeRaycastHit<T> hit, float maxDistance = float.PositiveInfinity) where T : unmanaged
+        public static bool RaycastAABB<T>(this NativeQuadtree<T> quadtree, Ray2D ray, out QuadtreeRaycastHit<T> hit, fp maxDistance = fp.PositiveInfinity) where T : unmanaged
         {
             return quadtree.Raycast<RayAABBIntersecter<T>>(ray, out hit, maxDistance: maxDistance);
         }
 
         struct RayAABBIntersecter<T> : IQuadtreeRayIntersecter<T> where T : unmanaged
         {
-            public bool IntersectRay(in PrecomputedRay2D ray, T obj, AABB2D objBounds, out float distance)
+            public bool IntersectRay(in PrecomputedRay2D ray, T obj, AABB2D objBounds, out fp distance)
             {
                 return objBounds.IntersectsRay(ray.origin, ray.invDir, out distance);
             }
@@ -100,7 +100,7 @@ namespace NativeTrees
         /// <param name="nearest">The nearest object found</param>
         /// <typeparam name="T"></typeparam>
         /// <returns>If an object was found within the given maximum distance</returns>
-        public static bool TryGetNearestAABB<T>(this NativeQuadtree<T> quadtree, float2 point, float maxDistance, out T nearest) where T : unmanaged
+        public static bool TryGetNearestAABB<T>(this NativeQuadtree<T> quadtree, float2 point, fp maxDistance, out T nearest) where T : unmanaged
         {
             var visitor = new QuadtreeNearestAABBVisitor<T>();
             quadtree.Nearest(point, maxDistance, ref visitor, default(AABBDistanceSquaredProvider<T>));
@@ -118,7 +118,7 @@ namespace NativeTrees
         /// <param name="nearest">The nearest object found</param>
         /// <typeparam name="T"></typeparam>
         /// <returns>If an object was found within the given maximum distance</returns>
-        public static bool TryGetNearestAABB<T>(this NativeQuadtree<T>.NearestNeighbourQuery queryCache, ref NativeQuadtree<T> quadtree, float2 point, float maxDistance, out T nearest) where T : unmanaged
+        public static bool TryGetNearestAABB<T>(this NativeQuadtree<T>.NearestNeighbourQuery queryCache, ref NativeQuadtree<T> quadtree, float2 point, fp maxDistance, out T nearest) where T : unmanaged
         {
             var visitor = new QuadtreeNearestAABBVisitor<T>();
             queryCache.Nearest(ref quadtree, point, maxDistance, ref visitor, default(AABBDistanceSquaredProvider<T>));
@@ -128,7 +128,7 @@ namespace NativeTrees
 
         public struct AABBDistanceSquaredProvider<T> : IQuadtreeDistanceProvider<T> where T : unmanaged
         {
-            public float DistanceSquared(float2 point, T obj, AABB2D bounds) => bounds.DistanceSquared(point);
+            public fp DistanceSquared(float2 point, T obj, AABB2D bounds) => bounds.DistanceSquared(point);
         }
 
         struct QuadtreeNearestAABBVisitor<T> : IQuadtreeNearestVisitor<T> where T : unmanaged

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NativeTrees;
 using Unity.Collections;
-using Unity.Mathematics;
+using Unity.Mathematics.Fixed;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

@@ -3,7 +3,8 @@
     "rootNamespace": "NativeTrees",
     "references": [
         "Unity.Collections",
-        "Unity.Mathematics"
+        "Unity.Mathematics.Fixed",
+        "FixedPointSharp"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

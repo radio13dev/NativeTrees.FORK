@@ -12,6 +12,6 @@ namespace NativeTrees
         /// <returns>Return if a hit occured</returns>
         /// <remarks>Note that the <see cref="NativeOctree{T}"/> does not prune based on AABB's. So if your
         /// intersection test is fairly expensive, it may be a good idea to first test against the object's bounds in this method.</remarks>
-        bool IntersectRay(in PrecomputedRay2D ray, T obj, AABB2D objBounds, out float distance);
+        bool IntersectRay(in PrecomputedRay2D ray, T obj, AABB2D objBounds, out fp distance);
     }
 }
