@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
-using Deterministic.FixedPoint;
+
 using Unity.Mathematics.Fixed;
 using UnityEngine;
 using static Unity.Mathematics.Fixed.math;

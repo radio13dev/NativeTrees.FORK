@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Deterministic.FixedPoint;
+
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics.Fixed;
