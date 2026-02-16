@@ -6,8 +6,7 @@
         "com.bartofzo.nativetrees",
         "Unity.Collections",
         "Unity.Mathematics",
-        "Unity.Mathematics.Fixed",
-        "FixedPointSharp"
+        "Unity.Mathematics.Fixed"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
